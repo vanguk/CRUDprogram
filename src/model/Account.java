@@ -1,14 +1,22 @@
 package model;
 
 import repository.FileModel;
+import repository.FileStorageManager;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Random;
 
-public class Account implements FileModel {
+public class Account implements FileModel, Serializable {
     private int accountId;
     private BigDecimal balance;
     private AccountStatus accountStatus;
+
+    public static Account getAccountById(Integer id) {
+        FileStorageManager<Account> fileStorageManager = new FileStorageManager<>("src/resources/accounts.txt", Account.class);
+        return fileStorageManager.readBy(id);
+    }
 
     public Account(int accountNumber, String balance, AccountStatus accountStatus) {
         this.accountId = accountNumber;
@@ -16,17 +24,10 @@ public class Account implements FileModel {
         this.accountStatus = accountStatus;
     }
 
-    public Account(String str) {
-        String[] token = str.split(";");
-        this.accountId = Integer.parseInt(token[0]);
-        this.balance = new BigDecimal(token[1]);
-        this.accountStatus = AccountStatus.valueOf(token[2]);
-    }
-
     public Account() {
         this.accountId = new Random().nextInt(10000);
         this.balance = new BigDecimal(0L);
-        this.accountStatus = AccountStatus.FINISHED;
+        this.accountStatus = AccountStatus.ACTIVE;
     }
 
     public int getAccountId() {
@@ -53,21 +54,28 @@ public class Account implements FileModel {
         this.accountStatus = accountStatus;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "accountId=" + accountId +
-                ", balance=" + balance +
-                ", accountStatus=" + accountStatus +
-                '}';
-    }
 
     public int getId() {
         return accountId;
     }
 
-
-    public String getStringForFile() {
-        return getAccountId() + ";" + getBalance() + ";" + AccountStatus.ACTIVE;
+    @Override
+    public String toString() {
+        return "AccountId= " + accountId + " balance= " + balance + " accountStatus= " + accountStatus + "\n";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return accountId == account.accountId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId);
+    }
+
 }
+

@@ -4,14 +4,18 @@ import model.Customer;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FileStorageManager<T extends FileModel> {
 
     String filePath;
     File file;
-    PrintStream printStream;
+    //PrintStream printStream;
+    FileWriter fileWriter;
+
 
     Class<T> modelType;
 
@@ -21,43 +25,52 @@ public class FileStorageManager<T extends FileModel> {
         this.file = new File(filePath);
 
         try {
-            this.printStream = new PrintStream(file);
+            //this.printStream = new PrintStream(file);
+            this.fileWriter = new FileWriter(file, true);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void saveObject(T object) {
-        printStream.println(object.getStringForFile());
-    }
-
-    public void saveAllObjects(T[] Objects) {
-
+        Map<Integer, T> map = readAll();
+        if (map != null) {
+            map.put(object.getId(), object);
+            serializableAll(map);
+        } else {
+            map = new HashMap<>();
+            map.put(object.getId(), object);
+            serializableAll(map);
+        }
     }
 
     public Map<Integer, T> readAll() {
-        Map<Integer, T> resultCollection = new HashMap<>();
-        try {
-            String str = null;
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while ((str = bufferedReader.readLine()) != null) {
-                T object = modelType.getDeclaredConstructor(String.class).newInstance(str);
-                resultCollection.put(object.getId(), object);
-            }
-            fileReader.close();
-            bufferedReader.close();
-
-        } catch (IOException | NoSuchMethodException e) {
+        Map<Integer, T> allObjects = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            allObjects = (Map<Integer, T>) ois.readObject();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (EOFException e) {
             e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return resultCollection;
+        return allObjects;
+    }
+
+    public void serializableAll(Map<Integer, T> objects) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(objects);
+            oos.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public T readBy(Integer id) {
@@ -65,17 +78,32 @@ public class FileStorageManager<T extends FileModel> {
     }
 
     public void deleteBy(Integer id) {
-        Map<Integer, T> allObjects = this.readAll();
-        allObjects.remove(id);
-        printStream.close();
-        file.delete();
-        try {
-            printStream = new PrintStream(file);
+        Map<Integer, T> map = (Map<Integer, T>) readAll();
+        map.remove(id);
+        serializableAll(map);
+    }
+
+
+    public T deSerializationFromFile(int idObject) {
+        Map<Integer, T> allObjects = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            allObjects = (Map<Integer, T>) ois.readObject();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        for (Map.Entry<Integer, T> entry : allObjects.entrySet()) {
-            saveObject(entry.getValue());
+        return allObjects.get(idObject);
+    }
+
+    public List<String> showAllCustomer() {
+        List<String> list = new ArrayList<>();
+        Map<Integer, T> allObject = readAll();
+        for (Map.Entry<Integer, T> entry : allObject.entrySet()) {
+            list.add(entry.getValue().toString());
         }
+        return list;
     }
 }
