@@ -13,16 +13,7 @@ public class Account implements FileModel, Serializable {
     private BigDecimal balance;
     private AccountStatus accountStatus;
 
-    public static Account getAccountById(Integer id) {
-        FileStorageManager<Account> fileStorageManager = new FileStorageManager<>("src/resources/accounts.txt", Account.class);
-        return fileStorageManager.readBy(id);
-    }
 
-    public Account(int accountNumber, String balance, AccountStatus accountStatus) {
-        this.accountId = accountNumber;
-        this.balance = new BigDecimal(balance);
-        this.accountStatus = accountStatus;
-    }
 
     public Account() {
         this.accountId = new Random().nextInt(10000);
@@ -41,7 +32,12 @@ public class Account implements FileModel, Serializable {
     public BigDecimal getBalance() {
         return balance;
     }
-
+    public void addMoney(BigDecimal money){
+        this.balance = balance.add(money);
+    }
+    public void minusMoney(BigDecimal money){
+        this.balance = balance.subtract(money);
+    }
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
@@ -64,18 +60,18 @@ public class Account implements FileModel, Serializable {
         return "AccountId= " + accountId + " balance= " + balance + " accountStatus= " + accountStatus + "\n";
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return accountId == account.accountId;
+        return accountId == account.accountId && accountStatus == account.accountStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId);
+        return Objects.hash(accountId, accountStatus);
     }
-
 }
 

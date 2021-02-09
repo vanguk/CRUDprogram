@@ -13,28 +13,6 @@ public class Customer implements FileModel, Serializable {
     private String lastName;
     private List<Account> accounts;
 
-    public Customer(int id, String firstName, String lastName, List<Account> accounts) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.accounts = accounts;
-
-    }
-
-    public Customer(String firstName, String lastName) {
-        this.id = new Random().nextInt(10000);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.accounts = new ArrayList<>();
-    }
-
-    public Customer(int id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.accounts = new ArrayList<>();
-    }
-
     public Customer() {
         this.id = new Random().nextInt(10000);
         this.accounts = new ArrayList<>();

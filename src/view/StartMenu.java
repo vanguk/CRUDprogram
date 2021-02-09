@@ -1,24 +1,23 @@
 package view;
 
-import java.util.Scanner;
+import utilClass.Validator;
 
 public class StartMenu {
     public static void startMenu() {
         System.out.println("Please select: \n 1 - Customer menu \n 2 - Account menu \n 0 - Exit");
-            Scanner scanner = new Scanner(System.in);
-            if (scanner.hasNextInt()) {
-                int number = scanner.nextInt();
-                switch (number) {
-                    case (1):
-                        CustomerMenu.menu();
-                        startMenu();
-                        break;
-                    case (2):
-                        break;
-                    case (0):
-                        System.exit(0);
-                }
-
-            }
+        int number = Validator.validateInt();
+        if (1 == number) {
+            new CustomerMenu().menu();
+            startMenu();
+        } else if (2 == number) {
+            new AccountMenu().accountMenu();
+            startMenu();
+        } else if (0 == number) {
+            System.exit(0);
+        } else {
+            System.out.println("Menu item selected incorrectly");
+            startMenu();
         }
+
+    }
 }
