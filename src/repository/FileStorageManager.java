@@ -10,10 +10,6 @@ public class FileStorageManager<T extends FileModel> {
 
     String filePath;
     File file;
-    //PrintStream printStream;
-    FileWriter fileWriter;
-
-
     Class<T> modelType;
 
     /**
@@ -60,8 +56,6 @@ public class FileStorageManager<T extends FileModel> {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(objects);
             oos.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,12 +80,7 @@ public class FileStorageManager<T extends FileModel> {
         Map<Integer, T> allObjects = null;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             allObjects = (Map<Integer, T>) ois.readObject();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (EOFException e) {
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return allObjects;

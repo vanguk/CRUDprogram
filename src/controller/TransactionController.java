@@ -1,8 +1,9 @@
 package controller;
 
-import model.Customer;
 import model.Transaction;
 import repository.FileStorageManager;
+
+import java.util.List;
 
 public class TransactionController {
     final FileStorageManager<Transaction> transactionFileStorageManager;
@@ -10,5 +11,7 @@ public class TransactionController {
     public TransactionController() {
         this.transactionFileStorageManager = new FileStorageManager<Transaction>("src/resources/transactions.txt", Transaction.class);
     }
-
+    public List getAllTransactions(){
+        return transactionFileStorageManager.showAllObjects();
+    }
 }

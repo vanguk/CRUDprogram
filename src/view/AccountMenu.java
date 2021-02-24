@@ -3,8 +3,6 @@ package view;
 import controller.AccountController;
 import utilClass.Validator;
 
-import java.util.Scanner;
-
 public class AccountMenu {
 
     AccountController accountController = new AccountController();

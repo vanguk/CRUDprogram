@@ -8,7 +8,7 @@ public class Validator {
 
     public static String validateString() {
         String str = scanner.nextLine();
-        if (Pattern.matches("[a-zA-Z]+", str)) {
+        if (Pattern.matches("[a-zA-Zа-яА-Я]+", str)) {
             return str;
         } else {
             System.out.println("Incorrect input \n Re-Enter");

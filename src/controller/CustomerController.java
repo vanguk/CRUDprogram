@@ -3,8 +3,6 @@ package controller;
 import model.*;
 import repository.FileStorageManager;
 import utilClass.Validator;
-
-import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 
 public class CustomerController {
@@ -26,16 +24,8 @@ public class CustomerController {
         return instance;
     }
 
-    public AccountController getAccountController() {
-        return accountController;
-    }
-
     public FileStorageManager<Customer> getCustomerFileStorageManager() {
         return customerFileStorageManager;
-    }
-
-    public TransactionController getTransactionController() {
-        return transactionController;
     }
 
     /**
@@ -44,12 +34,17 @@ public class CustomerController {
      * @return
      */
 
-    public Customer createNewCustomer(String firstName, String lastName) {
-        Customer customer = new Customer();
-        customer.setFirstName(firstName);
-        customer.setLastName(lastName);
-        customerFileStorageManager.saveObject(customer);
-        return customer;
+    public Customer createNewCustomer(String firstName, String lastName , int customerId) {
+        if (!customerFileStorageManager.checkObject(customerId)){
+            Customer customer = new Customer(customerId);
+            customer.setFirstName(firstName);
+            customer.setLastName(lastName);
+            customerFileStorageManager.saveObject(customer);
+            return customer;
+        }else {
+            return customerFileStorageManager.readObject(customerId);
+        }
+
     }
 
     /**
@@ -76,7 +71,7 @@ public class CustomerController {
     public void addAccountForCustomer(int customerId) {
         if (customerFileStorageManager.checkObject(customerId)) {
             Customer customer = customerFileStorageManager.readObject(customerId);
-            Account account = new Account();
+            Account account = new Account(customerId);
             accountController.accountFileStorageManager.saveObject(account);
             customer.getAccounts().add(account);
             customerFileStorageManager.saveObject(customer);
@@ -85,7 +80,7 @@ public class CustomerController {
         }
     }
 
-    public List<Account> showAllAccounts(int customerId) {
+    public List<Account> getAllAccounts(int customerId) {
 
         List<Account> list = new ArrayList<>();
         if (customerFileStorageManager.checkObject(customerId)) {
@@ -101,7 +96,7 @@ public class CustomerController {
     }
 
 
-    public List showAllCustomer() {
+    public List getAllCustomer() {
         return customerFileStorageManager.showAllObjects();
     }
 
@@ -180,7 +175,6 @@ public class CustomerController {
             Account account = null;
             Transaction transaction = null;
             int number, amount;
-            Scanner scanner = new Scanner(System.in);
             System.out.println(customer.getAccounts());
             System.out.println("Enter id account from which to transfer\n");
             number = Validator.validateInt();

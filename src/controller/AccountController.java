@@ -17,23 +17,8 @@ public class AccountController {
         accountFileStorageManager = new FileStorageManager<>("src/resources/accounts.txt", Account.class);
     }
 
-    /**
-     * Remove account from customer
-     *
-     * @param accountId
-     * @return
-     */
-    public Account changeStatusAccount(int accountId) {
-        Account account = accountFileStorageManager.readObject(accountId);
-        account.setAccountStatus(AccountStatus.DELETED);
-        accountFileStorageManager.saveObject(account);
-        return accountFileStorageManager.readObject(accountId);
-    }
-
-
     public List<Account> showAllAccounts() {
         List<Account> list = new ArrayList<>();
-        Map<Integer, Account> map = accountFileStorageManager.readAll();
         for (Map.Entry<Integer, Account> entry : accountFileStorageManager.readAll().entrySet()) {
             list.add(entry.getValue());
         }

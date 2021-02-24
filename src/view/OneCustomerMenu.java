@@ -1,9 +1,7 @@
 package view;
 
-import controller.AccountController;
 import controller.CustomerController;
 import utilClass.Validator;
-
 import java.util.Scanner;
 
 public class OneCustomerMenu {
@@ -38,7 +36,7 @@ public class OneCustomerMenu {
             menuOneCustomer(customerId);
         } else if (5 == number) {
             System.out.println("ALL ACCOUNTS");
-            System.out.println(CustomerController.getInstance().showAllAccounts(customerId));
+            System.out.println(CustomerController.getInstance().getAllAccounts(customerId));
             menuOneCustomer(customerId);
         } else if (6 == number) {
             System.out.println("1 - Transfer to account \n 2 - Debit to account \n");

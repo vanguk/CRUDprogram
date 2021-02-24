@@ -1,12 +1,9 @@
 package model;
 
 import repository.FileModel;
-import repository.FileStorageManager;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Random;
 
 public class Account implements FileModel, Serializable {
     private int accountId;
@@ -15,18 +12,14 @@ public class Account implements FileModel, Serializable {
 
 
 
-    public Account() {
-        this.accountId = new Random().nextInt(10000);
+    public Account(int accountId) {
+        this.accountId = accountId;
         this.balance = new BigDecimal(0L);
         this.accountStatus = AccountStatus.ACTIVE;
     }
 
     public int getAccountId() {
         return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
     }
 
     public BigDecimal getBalance() {

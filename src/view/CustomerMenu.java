@@ -1,9 +1,7 @@
 package view;
 
-import controller.AccountController;
 import controller.CustomerController;
 import utilClass.Validator;
-
 import java.util.Scanner;
 
 public class CustomerMenu {
@@ -23,7 +21,9 @@ public class CustomerMenu {
                 String firstName = Validator.validateString();
                 System.out.println("Enter last name");
                 String lastName = Validator.validateString();
-                System.out.println("Account " + CustomerController.getInstance().createNewCustomer(firstName,lastName) + " created");
+                System.out.println("Enter customer ID");
+                int customerID = Validator.validateInt();
+                System.out.println("Account " + CustomerController.getInstance().createNewCustomer(firstName,lastName,customerID) + " created");
                 menu();
             } else if (2 == number) {
                 System.out.println("Enter ID customer which should be removed");
@@ -46,7 +46,7 @@ public class CustomerMenu {
 
             } else if (4 == number) {
                 System.out.println("ALL CUSTOMERS: \n");
-                System.out.println(CustomerController.getInstance().showAllCustomer());
+                System.out.println(CustomerController.getInstance().getAllCustomer());
                 menu();
             } else if (9 == number) {
                 StartMenu.startMenu();

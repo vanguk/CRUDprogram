@@ -5,7 +5,6 @@ import repository.FileModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Customer implements FileModel, Serializable {
     private int id;
@@ -13,33 +12,18 @@ public class Customer implements FileModel, Serializable {
     private String lastName;
     private List<Account> accounts;
 
-    public Customer() {
-        this.id = new Random().nextInt(10000);
+    public Customer(int customerId) {
+        this.id = customerId;
         this.accounts = new ArrayList<>();
     }
 
-    public void addAccount(Account account) {
-        this.accounts.add(account);
-    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public void setLastName(String lastName) {

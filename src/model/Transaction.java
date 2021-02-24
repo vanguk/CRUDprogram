@@ -1,12 +1,8 @@
 package model;
 
 import repository.FileModel;
-import repository.FileStorageManager;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
@@ -30,10 +26,6 @@ public class Transaction implements FileModel, Serializable {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public Account getAccount() {
         return account;
     }
@@ -42,28 +34,8 @@ public class Transaction implements FileModel, Serializable {
         this.account = account;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public TransactionStatus getTransactionStatus() {
-        return transactionStatus;
-    }
-
     public void setTransactionStatus(TransactionStatus transactionStatus) {
         this.transactionStatus = transactionStatus;
-    }
-
-    public int getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(int transactionId) {
-        this.transactionId = transactionId;
     }
 
     @Override
